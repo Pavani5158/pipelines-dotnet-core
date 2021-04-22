@@ -15,30 +15,16 @@ variables:
 
 steps:
 
-- task: DotNetCoreCLI@2
+- task: oc-cmd@2
   inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '**/*.csproj'
-  displayName: 'Restore Nuget Packages'
-
-- task: DotNetCoreCLI@2
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'My OpenShift'
+    version: '4.2'
+    cmd: 'oc start-build calculator --follow'
+- task: oc-cmd@2
   inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--no-restore'
-  displayName: 'Build projects'
-
-
- 
-
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '**/pipelines-dotnet-core.csproj'
-    arguments: '--configuration $(buildConfiguration) --no-restore'
-    modifyOutputPath: false
-  displayName: 'Publish CustomerApi'
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'My OpenShift'
+    version: '4.2'
+    cmd: 'oc status'
 
