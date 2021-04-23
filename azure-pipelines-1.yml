@@ -13,27 +13,19 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-
 - task: DotNetCoreCLI@2
   displayName: Restore
   inputs:
     command: restore
-    projects: '$(Parameters.RestoreBuildProjects)'
+    projects: '**/*.csproj'
+    feedsToUse: config
+    nugetConfigPath: NuGet.config   
+    externalFeedCredentials: <Name of the NuGet service connection>
+
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
-    projects: '$(Parameters.RestoreBuildProjects)'
-    arguments: '--configuration $(BuildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: Publish
-  inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
-    workingDirectory: 'pipelines-dotnet-core'
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
  
