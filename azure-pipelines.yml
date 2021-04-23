@@ -14,18 +14,34 @@ variables:
   
 
 steps:
-
+steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    feedsToUse: 'select'
-    vstsFeed: 'my-vsts-feed' # A series of numbers and letters
-
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: build
     projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  displayName: 'Restore Nuget Packages'
+ 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--no-restore'
+  displayName: 'Build projects'
+ 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*Test.csproj'
+    arguments: '--no-restore'
+  displayName: 'Run Tests'
+ 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/pipelines-dotnet-core.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
+    modifyOutputPath: false
+  displayName: 'Publish pipelines-dotnet-core'
 
 
