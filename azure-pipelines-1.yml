@@ -11,15 +11,12 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  
 
 steps:
-
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
-    feedsToUse: 'select'
   displayName: 'Restore Nuget Packages'
  
 - task: DotNetCoreCLI@2
@@ -37,5 +34,3 @@ steps:
     arguments: '--configuration $(buildConfiguration) --no-restore'
     modifyOutputPath: false
   displayName: 'Publish pipelines-dotnet-core'
-
-
