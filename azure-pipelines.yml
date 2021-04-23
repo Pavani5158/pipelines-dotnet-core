@@ -18,24 +18,13 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    projects: '**/*.csproj'
     feedsToUse: 'select'
-  displayName: 'Restore Nuget Packages'
- 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--no-restore'
-  displayName: 'Build projects'
+    vstsFeed: 'my-vsts-feed' # A series of numbers and letters
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '**/pipelines-dotnet-core.csproj'
-    arguments: '--configuration $(buildConfiguration) --no-restore'
-    modifyOutputPath: false
-  displayName: 'Publish pipelines-dotnet-core'
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
+  displayName: 'dotnet build $(buildConfiguration)'
 
 
